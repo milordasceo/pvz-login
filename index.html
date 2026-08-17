@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ПВЗ Про — вход через VK и Яндекс</title>
+  <style>
+    :root {
+      --bg: #f4f4f5;
+      --card: #fff;
+      --ink: #18181b;
+      --muted: #52525b;
+      --line: #e4e4e7;
+      --accent: #2563eb;
+      --ok: #15803d;
+      --warn: #b45309;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.45;
+      padding: 16px 16px calc(32px + env(safe-area-inset-bottom));
+    }
+    h1 { font-size: 1.45rem; line-height: 1.25; margin: 8px 0 12px; }
+    h2 { font-size: 1.15rem; margin: 0 0 10px; }
+    p { margin: 0 0 10px; }
+    .lead { color: var(--muted); margin-bottom: 16px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 0 0 14px;
+    }
+    .step { counter-increment: s; }
+    .step h2::before {
+      content: counter(s);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px; height: 28px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      margin-right: 8px;
+      vertical-align: -3px;
+    }
+    ol { padding-left: 1.2em; margin: 8px 0 0; }
+    li { margin: 0 0 8px; }
+    a { color: var(--accent); word-break: break-word; }
+    .copy {
+      display: block;
+      width: 100%;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 15px;
+      background: #f4f4f5;
+      border: 1px dashed #a1a1aa;
+      border-radius: 12px;
+      padding: 12px;
+      margin: 8px 0;
+      overflow-wrap: anywhere;
+    }
+    .note {
+      background: #fff7ed;
+      color: var(--warn);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 15px;
+    }
+    .ok {
+      background: #f0fdf4;
+      color: var(--ok);
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+    .btn {
+      display: block;
+      text-align: center;
+      background: var(--accent);
+      color: #fff !important;
+      text-decoration: none;
+      font-weight: 650;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin: 10px 0 4px;
+    }
+    .btn.sec { background: #3f3f46; }
+  </style>
+</head>
+<body>
+  <p class="lead">ПВЗ Про · что сделать сейчас, чтобы заработали кружки VK и Яндекс</p>
+  <h1>Вход через VK и Яндекс</h1>
+  <p>Код в приложении уже готов. Тебе нужно завести два приложения в кабинетах и прописать публичные id. Секреты в телефон <b>не</b> кладём.</p>
+
+  <div class="card">
+    <p><b>Что должно получиться</b></p>
+    <p>В `.env` три строки. Redirect везде один и тот же:</p>
+    <code class="copy">pvzpro://oauth</code>
+  </div>
+
+  <article class="card step">
+    <h2>VK ID</h2>
+    <ol>
+      <li>Открой кабинет VK ID (нужен аккаунт VK).</li>
+      <li>Подключи VK ID и создай приложение. Платформа — <b>сайт / без SDK</b> или Android, как предложит мастер.</li>
+      <li>В настройках приложения найди <b>идентификатор приложения</b> (это <code>client_id</code>, число вроде 7915193).</li>
+      <li>В список доверенных redirect URL добавь ровно:</li>
+    </ol>
+    <code class="copy">pvzpro://oauth</code>
+    <p class="note">Если кабинет принимает только https — добавь ещё и <code>https://oauth.vk.com/blank.html</code> не нужно: нам нужен именно <code>pvzpro://oauth</code>. Если поле ругается на схему, выбери тип «мобильное / custom URL».</p>
+    <a class="btn" href="https://id.vk.ru/about/business">Открыть кабинет VK ID</a>
+    <a class="btn sec" href="https://id.vk.ru/about/business/go/docs/ru/vkid/latest/vk-id/connection/create-application">Как создать приложение</a>
+  </article>
+
+  <article class="card step">
+    <h2>Яндекс ID</h2>
+    <ol>
+      <li>Войди в Яндекс OAuth тем аккаунтом, с которого ведёшь разработку.</li>
+      <li>Создай приложение <b>для авторизации пользователей</b>.</li>
+      <li>Платформы: отметь <b>Android</b> и при необходимости «Веб-сервисы».</li>
+      <li>Redirect URI — снова ровно:</li>
+    </ol>
+    <code class="copy">pvzpro://oauth</code>
+    <ol start="5">
+      <li>Скопируй <b>ClientID</b> (длинная строка). Client secret в приложение <b>не копируй</b>.</li>
+      <li>Доступ: логин и адрес почты (если мастер спросит).</li>
+    </ol>
+    <a class="btn" href="https://oauth.yandex.ru/client/new">Создать приложение Яндекс</a>
+    <a class="btn sec" href="https://yandex.ru/dev/id/doc/ru/register-client">Документация регистрации</a>
+  </article>
+
+  <article class="card step">
+    <h2>Пропиши id в проекте</h2>
+    <p>На компьютере, в папке проекта, файл <b>.env</b> (если нет — скопируй <b>.env.example</b>).</p>
+    <code class="copy">EXPO_PUBLIC_VK_CLIENT_ID=сюда_число_из_VK
+EXPO_PUBLIC_YANDEX_CLIENT_ID=сюда_ClientID_Яндекса
+EXPO_PUBLIC_OAUTH_REDIRECT_URI=pvzpro://oauth</code>
+    <p class="note">Публичные id, не пароли. В git этот файл не коммитим.</p>
+    <p>После сохранения напиши в чат агента: «id прописал, обнови preview». Ключи сами вшиваются в JS при OTA. Пока Metro/OTA не пересобрали — кнопки не увидят новые id.</p>
+  </article>
+
+  <article class="card step">
+    <h2>Проверь на телефоне</h2>
+    <ol>
+      <li>Обнови приложение (OTA preview).</li>
+      <li>На экране «Войти» нажми синий <b>VK</b> или красный <b>Я</b>.</li>
+      <li>Должен открыться браузер сервиса, не список мок-профилей.</li>
+      <li>Если id пустые — будет ошибка «Не задан client id». Это нормально, пока шаг 3 не сделан.</li>
+    </ol>
+    <p class="ok">Почта и телефон работают как раньше, их трогать не нужно.</p>
+  </article>
+
+  <article class="card">
+    <h2>Если не пускает</h2>
+    <ul>
+      <li><b>redirect_uri не совпадает</b> — в кабинете и в .env буква в букву <code>pvzpro://oauth</code>.</li>
+      <li><b>Сборка старая</b> — после правки .env нужен новый OTA, не просто перезапуск экрана.</li>
+      <li>Сборка <b>pzbro</b> — схема другая: <code>pzbrodev://oauth</code>. Тогда и в кабинетах, и в .env укажи её.</li>
+    </ul>
+  </article>
+</body>
+</html>
